@@ -38,7 +38,7 @@ const NuevaVenta = () => {
           </li>
         ))}
       </ul>
-      <h1>Carrito</h1>
+      <h1>Carrito2</h1>
       <ul>
         {cart.map((product, index) => (
           
