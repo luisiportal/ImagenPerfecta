@@ -3,11 +3,7 @@ import * as Yup from "yup";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import MostrarError from "../components/validacionForm/mostrarError";
-import {
-  cargarPerfilRequest,
-  registerRequest,
-  updateTrabajadorRequest,
-} from "../api/productos.api";
+
 
 const AgregarTrabajador = () => {
   const params = useParams();
@@ -46,24 +42,7 @@ const AgregarTrabajador = () => {
   }, []);
 
   const handleSubmit = async (values) => {
-    const formData = new FormData();
-
-    {
-      params.id ? false : formData.append("username", values.username);
-    }
-    {
-      params.id ? false : formData.append("password", values.password);
-    }
-    formData.append("nombre", values.nombre);
-    formData.append("apellidos", values.apellidos);
-    formData.append("movil", values.movil);
-    formData.append("puesto", values.puesto);
-    formData.append("direccion", values.direccion);
-    formData.append("salario", values.salario);
-    if (file !== null) {
-      formData.append("foto_perfil", file);
-    }
-
+  
     try {
       if (params.id) {
         await updateTrabajadorRequest(params.id, formData);
@@ -72,7 +51,7 @@ const AgregarTrabajador = () => {
 
         navigate("/trabajador/plantilla");
       } else {
-        await registerRequest(formData);
+        await registerRequest(values);
 
         alert("Se ha agregado un nuevo trabajador correctamente");
         navigate("/trabajador/plantilla");

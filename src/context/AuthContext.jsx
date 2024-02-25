@@ -1,12 +1,6 @@
 import React, { createContext, useEffect } from "react";
 import { useState, useContext } from "react";
-import {
-  loginRequest,
-  logoutRequest,
-  registerRequest,
-  verifyTokenRequest,
-} from "../api/productos.api";
-import Cookies from "js-cookie";
+import { cargarPerfilRequest } from "../api/trabajador";
 
 export const AuthContext = createContext();
 
@@ -18,64 +12,53 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [perfil, setPerfil] = useState({
+    username: "",
+    nombre: "",
+    apellidos: "",
+    movil: "",
+    puesto: "",
+  });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  const signup = async (formData) => {
-    
-    try {
-     
-      await registerRequest(formData);
-      
-    } catch (error) {
-      setErrors(error.response.data);
-    }
-  };
-
-  const login = (user) => {
-    setUser(user);
-    setIsAuthenticated(true);
-  };
-
-  const logout = async (user) => {
-    try {
-      const res = await logoutRequest();
-
-      setUser(res.data);
-      setIsAuthenticated(false);
-    } catch (error) {
-      setErrors(error.response.data);
-    }
-  };
-
   useEffect(() => {
     async function checkLogin() {
-      const cookies = Cookies.get();
-     
-      if (!cookies.token) {
+      if (!localStorage.getItem("autenticadp", "soloPruebasSinBackend")) {
         setIsAuthenticated(false);
         return setUser(null);
-      }
-      try {
-        const res = await verifyTokenRequest(cookies.token);
-        if (!res.data) {
-          setIsAuthenticated(false);
-          setLoading(false);
-          return;
-        }
-
+      } else {
         setIsAuthenticated(true);
-        setUser(res.data);
-        setLoading(false);
-      } catch (error) {
-        setIsAuthenticated(false);
-        setUser(null);
-        setLoading(false);
       }
     }
     checkLogin();
   }, []);
+
+  const signup = async (formData) => {
+    try {
+      await registerRequest(formData);
+    } catch (error) {
+      setErrors(error.response.data);
+    }
+  };
+
+  const login = (usuarioAutenticado) => {
+    console.log(usuarioAutenticado);
+    localStorage.setItem("autenticadp", "soloPruebasSinBackend");
+    cargarPerfil(usuarioAutenticado);
+    setIsAuthenticated(true);
+  };
+
+  const logout = async () => {
+    localStorage.removeItem("autenticadp", "soloPruebasSinBackend");
+    setIsAuthenticated(false);
+  };
+  const cargarPerfil = async (user) => {
+    const response = await cargarPerfilRequest(user.id);
+    console.log(response);
+    setPerfil(response);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -87,6 +70,8 @@ export const AuthProvider = ({ children }) => {
         login,
         loading,
         setIsAuthenticated,
+        perfil,
+        setPerfil,
       }}
     >
       {children}

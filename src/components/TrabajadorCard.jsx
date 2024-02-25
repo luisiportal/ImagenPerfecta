@@ -1,12 +1,11 @@
-import React from "react";
-import { useState } from "react";
-import { deleteTrabajadorRequest } from "../api/productos.api";
+import { React, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useProductos } from "../context/ProductoProvider";
-const TrabajadorCard = ({ trabajador}) => {
+import { useTrabajadores } from "../context/TrabajadorContext";
+
+const TrabajadorCard = ({ trabajador }) => {
   const [showBotones, setShowBotones] = useState(false);
   const navigate = useNavigate();
-  const { deleteTrabajador } = useProductos();
+  const { deleteTrabajador } = useTrabajadores();
 
   const handleMouseEnter = () => {
     setShowBotones(true);
@@ -36,6 +35,7 @@ const TrabajadorCard = ({ trabajador}) => {
             <h2 className="font-semibold">
               {`${trabajador.nombre} ${trabajador.apellidos}`}
             </h2>
+            <p className="text-gray-500">CI :{trabajador.ci}</p> 
             <p className="text-gray-500">Puesto :{trabajador.puesto}</p>
             <p className="text-gray-500">Movil : {trabajador.movil}</p>
             <p className="text-gray-500">Direccion : {trabajador.direccion}</p>
@@ -54,8 +54,10 @@ const TrabajadorCard = ({ trabajador}) => {
                   {" "}
                   <button
                     className="bg-slate-700 px-2 py-1 font-bold text-white rounded hover:bg-huellas_color"
-                   onClick={() => navigate(`../trabajador/profile/edit/${trabajador.id}`)}>
-                  
+                    onClick={() =>
+                      navigate(`../trabajador/profile/edit/${trabajador.id}`)
+                    }
+                  >
                     Editar
                   </button>
                 </div>

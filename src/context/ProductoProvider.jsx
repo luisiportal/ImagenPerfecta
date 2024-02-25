@@ -1,14 +1,7 @@
-import { createContext, useContext, useState } from "react";
-import {
-  getProductosRequest,
-  deleteProductoRequest,
-  createProductoRequest,
-  getProductoRequest,
-  updateProductoRequest,
-  deleteTrabajadorRequest,
-  cargarPlantillaTrabajadores,
-} from "../api/productos.api";
+import { useContext, useState } from "react";
+
 import { ProductoContext } from "./ProductoContext";
+import { productosDB } from "../db/productos";
 
 export const useProductos = () => {
   const context = useContext(ProductoContext);
@@ -19,30 +12,22 @@ export const useProductos = () => {
 };
 
 export const ProductoContextProvider = ({ children }) => {
-  const [productos, setProductos] = useState([]);
-  const [trabajadores, setTrabajadores] = useState([]);
+  const [productos, setProductos] = useState([productosDB]);
 
-  async function loadTrabajadores() {
-    const response = await cargarPlantillaTrabajadores();
-    setTrabajadores(response.data);
-  }
-
-  const deleteTrabajador = async (id) => {
-    try {
-      const response = await deleteTrabajadorRequest(id);
-      setTrabajadores(
-        trabajadores.filter((trabajador) => trabajador.id !== id)
+  const loadProductos = () => {
+    let productosJSON;
+    if (localStorage.getItem("productosDB")) {
+      
+      productosJSON = JSON.parse(localStorage.getItem("productosDB"));
+    } else {
+      productosJSON = localStorage.setItem(
+        "productosDB",
+        JSON.stringify(productosDB)
       );
-      alert("Se ha eliminado el trabajador correctamente");
-    } catch (error) {
-      console.error(error);
     }
-  };
 
-  async function loadProductos() {
-    const response = await getProductosRequest();
-    setProductos(response.data);
-  }
+    setProductos(productosJSON);
+  };
 
   const deleteProducto = async (id_producto) => {
     try {
@@ -55,14 +40,13 @@ export const ProductoContextProvider = ({ children }) => {
       console.error(error);
     }
   };
-  const createProducto = async (formData) => {
-    try {
-      await createProductoRequest(formData);
-      // setTasks([...tasks, response.data]);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const createProducto = (values) => {
+    console.log(values);
+    const elementosAnteriores =
+      JSON.parse(localStorage.getItem("productosDB")) || [];
+    elementosAnteriores.push(values); // No es necesario convertirlo a JSON aquí
+    localStorage.setItem("productosDB", JSON.stringify(elementosAnteriores));
+};
 
   const getProducto = async (id_producto) => {
     try {
@@ -93,9 +77,6 @@ export const ProductoContextProvider = ({ children }) => {
         deleteProducto,
         getProducto,
         updateProducto,
-        deleteTrabajador,
-        loadTrabajadores,
-        trabajadores,
       }}
     >
       {children}

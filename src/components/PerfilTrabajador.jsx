@@ -1,33 +1,16 @@
 import React from "react";
 import { useEffect } from "react";
-import { cargarPerfilRequest } from "../api/productos.api";
+import { cargarPerfilRequest } from "../api/trabajador";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const PerfilTrabajador = () => {
-  const { logout,user } = useAuth();
-  const [perfil, setPerfil] = useState({
-    username: "",
-    nombre: "",
-    apellidos: "",
-    movil: "",
-    puesto: "",
-  });
+  const { logout, user,perfil,setPerfil } = useAuth();
+  
   const navigate = useNavigate();
   const params = useParams();
-  useEffect(() => {
-    const cargarPerfil = async () => {
-      try {
-        const response = await cargarPerfilRequest(user.id);
-       
-
-        setPerfil(response.data);
-      } catch (error) {}
-    };
-
-    cargarPerfil();
-  }, []);
+ 
 
   return (
     <div>
@@ -48,7 +31,11 @@ const PerfilTrabajador = () => {
             />
           </div>
           <div className="flex justify-center">
-            <button onClick={() => navigate(`../trabajador/profile/edit/${perfil.id}`)}>
+            <button
+              onClick={() =>
+                navigate(`../trabajador/profile/edit/${perfil.id}`)
+              }
+            >
               {" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
