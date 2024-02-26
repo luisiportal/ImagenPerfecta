@@ -1,7 +1,7 @@
 import React from "react";
 import { useProductos } from "../context/ProductoProvider";
 import { useEffect } from "react";
-import OfertasCard from "../components/Cliente/OfertasCard";
+import ProductoCard from "../components/ProductoCard";
 
 const Cliente = () => {
   const { productos, loadProductos } = useProductos();
@@ -17,7 +17,7 @@ const Cliente = () => {
       
       <section className="grid sm:grid-cols-1 gap-2 xl:grid-cols-4 pt-10">
     {productos.map((producto) => (
-      <OfertasCard producto={producto} key={producto.id_producto} />
+      <ProductoCard producto={producto} key={producto.id_producto} />
     ))}
   </section></div>
     

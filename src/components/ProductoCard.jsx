@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import UbicacionSVG from "./SVG/UbicacionSVG.jsx";
 import EntregaSVG from "./SVG/EntregaSVG.jsx";
+import { useParams } from "react-router-dom";
 
 function ProductoCard({ producto }) {
   const [showBotones, setShowBotones] = useState(false);
@@ -17,7 +18,7 @@ function ProductoCard({ producto }) {
   const handleMouseLeave = () => {
     setShowBotones(false);
   };
-
+  const params = useParams();
   return (
     <div
       className={`mx-4 md:mx-1 my-1 bg-neutral-200  shadow rounded overflow-hidden p-2 hover:bg-huellas_color transition-all duration-500 ease-in-out cursor-pointer `}
@@ -46,27 +47,22 @@ function ProductoCard({ producto }) {
           </div>
         </section>
       </section>
-
-      <div className="transition-all duration-500 ease-in-out">
-        {showBotones && (
-          <div
-            className={`${
-              showBotones ? "visible" : "invisible"
-            } flex gap-x-1 transition-all duration-500 ease-in-out`}
-          >
-            <div className="bg-slate-700 px-2 py-1 font-bold text-white rounded hover:bg-huellas_color transition-all duration-500 ease-in-out">
-              <button onClick={() => deleteProducto(producto.id_producto)}>
-                Eliminar
-              </button>
-            </div>
-            <div className="bg-slate-700 px-2 py-1 font-bold text-white rounded hover:bg-huellas_color transition-all duration-500 ease-in-out">
-              <button onClick={() => navigate(`edit/${producto.id_producto}`)}>
-                Editar
-              </button>
-            </div>
+      {window.location.pathname === "/productos" && (
+        <section
+          className={`flex gap-x-1 transition-all duration-500 ease-in-out`}
+        >
+          <div className="bg-slate-700 px-2 py-1 font-bold text-white rounded hover:bg-slate-900 transition-all duration-500 ease-in-out">
+            <button onClick={() => deleteProducto(producto.id_producto)}>
+              Eliminar
+            </button>
           </div>
-        )}
-      </div>
+          <div className="bg-slate-700 px-2 py-1 font-bold text-white rounded hover:bg-slate-900 transition-all duration-500 ease-in-out">
+            <button onClick={() => navigate(`edit/${producto.id_producto}`)}>
+              Editar
+            </button>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

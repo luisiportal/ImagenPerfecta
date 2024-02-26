@@ -7,7 +7,7 @@ const Navbar = ({ hidden }) => {
 
   return (
     <div className={`${hidden} m-4 md:m-0 lg:flex md:ml-8 font-semibold`}>
-      <section className="flex">
+      <section className="lg:flex">
         <ElementoNavbar nombre={"Inicio"} href={"/"} />
         <ElementoNavbar nombre={"Servicios"} href={"/"} />
         <ElementoNavbar nombre={"Galeria"} href={"/"} />
@@ -24,12 +24,6 @@ const Navbar = ({ hidden }) => {
         ) : (
           ""
         )}
-      </section>
-
-      <section className="flex items-center justify-center">
-        <button className="bg-huellas_color font-bold text-white rounded-full px-5 py-1 align-middle">
-          <Link to={"/cliente"}>Reservar</Link>
-        </button>
       </section>
 
       <aside className="flex hover:text-huellas_color hover:scale-150 transition-transform duration-300 ">
