@@ -63,6 +63,19 @@ function ProductoCard({ producto }) {
           </div>
         </section>
       )}
+      {window.location.pathname === "/cliente" && (
+        <section className="flex justify-end gap-x-1 transition-all duration-500 ease-in-out">
+          <div className="bg-slate-700 px-2 py-1 font-bold text-white rounded hover:bg-slate-900 transition-all duration-500 ease-in-out">
+          <button
+            onClick={() => {
+              navigate(`/cliente/reservar/${producto.id_producto}`);
+            }}
+          >
+            Reservar
+          </button>
+        </div>
+        </section>
+      )}
     </div>
   );
 }

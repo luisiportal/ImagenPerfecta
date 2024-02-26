@@ -12,12 +12,10 @@ const ProductosPage = () => {
   }, []);
 
   function renderMain() {
-    
     if (productos.length === 0) return <h1>No hay productos</h1>;
     return productos.map((producto) => (
-      <ProductoCard producto={producto} key={producto.id_producto} />
+      <ProductoCard producto={producto} key={producto.index} />
     ));
-    
   }
   return (
     <div>
@@ -31,7 +29,7 @@ const ProductosPage = () => {
       </Link>
 
       <div className="grid sm:grid-cols-1 gap-2 xl:grid-cols-4 mt-8 ">
-        {renderMain()};
+        {renderMain()}
       </div>
     </div>
   );

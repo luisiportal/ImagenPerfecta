@@ -12,21 +12,17 @@ export const useProductos = () => {
 };
 
 export const ProductoContextProvider = ({ children }) => {
-  const [productos, setProductos] = useState([productosDB]);
+  const [productos, setProductos] = useState([]);
 
   const loadProductos = () => {
-    let productosJSON;
     if (localStorage.getItem("productosDB")) {
-      
-      productosJSON = JSON.parse(localStorage.getItem("productosDB"));
+      setProductos(JSON.parse(localStorage.getItem("productosDB")));
     } else {
-      productosJSON = localStorage.setItem(
-        "productosDB",
-        JSON.stringify(productosDB)
+      setProductos(
+        localStorage.setItem("productosDB", JSON.stringify(productosDB))
       );
     }
 
-    setProductos(productosJSON);
   };
 
   const deleteProducto = async (id_producto) => {
@@ -46,7 +42,7 @@ export const ProductoContextProvider = ({ children }) => {
       JSON.parse(localStorage.getItem("productosDB")) || [];
     elementosAnteriores.push(values); // No es necesario convertirlo a JSON aquí
     localStorage.setItem("productosDB", JSON.stringify(elementosAnteriores));
-};
+  };
 
   const getProducto = async (id_producto) => {
     try {
