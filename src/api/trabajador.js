@@ -21,7 +21,7 @@ export const loginRequest = (values) => {
   if (usuarioEncontrado) {
     if (usuarioEncontrado.password === contrasenaIngresada) {
       console.log("Inicio de sesión exitoso");
-      return usuarioEncontrado;
+      return usuarioEncontrado.id;
     } else {
       console.log("Contraseña incorrecta");
     }
@@ -33,37 +33,19 @@ export const loginRequest = (values) => {
 
 
 //perfil
-export const cargarPerfilRequest = async (id) => {
+export const cargarPerfilRequest = (id) => {
+  console.log('id');
+  console.log(id);
   const usuarioEncontrado = trabajadoresDB.find(
     (user) => user.id_usuario === id
   );
+  console.log(usuarioEncontrado);
   return usuarioEncontrado;
 };
 
 // plantilla trabajadores
 export const cargarPlantillaTrabajadores = () => {
-  const trabajadores = [
-    {
-      username: "luisiportal",
-      password: "123",
-      nombre: "Luis Ernesto",
-      apellidos: "Rodriguez",
-      movil: "58155198",
-      puesto: "Mantenimiento",
-      direccion: "Calle 6 #11 Reparto Versalles",
-      salario: "31000",
-    },
-    {
-      username: "ale",
-      password: "123",
-      nombre: "Alejandro",
-      apellidos: "Valiente",
-      movil: "5814566",
-      puesto: "Fotografo",
-      direccion: "Calle 78 #11 Reparto La Cuevita",
-      salario: "75000",
-    },
-  ];
+ 
 };
 
 

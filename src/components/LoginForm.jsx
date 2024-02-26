@@ -12,7 +12,6 @@ const Login = () => {
   const [credencial_invalida, setCredencial_invalida] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {}, [isAuthenticated]);
   return (
     <div className="h-screen">
       <h1 className=" text-3xl text-huellas_color font-bold mx-auto p-5 grid place-items-center">
@@ -32,8 +31,9 @@ const Login = () => {
         })}
         onSubmit={async (values, { setSubmitting }) => {
           try {
-            const usuarioAutenticado = loginRequest(values);
-            login(usuarioAutenticado);
+            const id_usuarioAutenticado = loginRequest(values);
+            console.log(id_usuarioAutenticado);
+            login(id_usuarioAutenticado);
             
 
   

@@ -1,16 +1,16 @@
-import React from "react";
-import { useEffect } from "react";
-import { cargarPerfilRequest } from "../api/trabajador";
-import { useState } from "react";
+import React, { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 
 const PerfilTrabajador = () => {
-  const { logout, user,perfil,setPerfil } = useAuth();
-  
+  const { logout, perfil, cargarPerfil } = useAuth();
+  useEffect(() => {
+    cargarPerfil();
+  }, []);
+
   const navigate = useNavigate();
   const params = useParams();
- 
+  console.log(perfil);
 
   return (
     <div>

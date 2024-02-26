@@ -42,10 +42,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = (usuarioAutenticado) => {
-    console.log(usuarioAutenticado);
-    localStorage.setItem("autenticadp", "soloPruebasSinBackend");
-    cargarPerfil(usuarioAutenticado);
+  const login = (id_usuarioAutenticado) => {
+    localStorage.setItem("autenticadp", id_usuarioAutenticado);
+   setUser(id_usuarioAutenticado);
     setIsAuthenticated(true);
   };
 
@@ -53,10 +52,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("autenticadp", "soloPruebasSinBackend");
     setIsAuthenticated(false);
   };
-  const cargarPerfil = async (user) => {
-    const response = await cargarPerfilRequest(user.id);
-    console.log(response);
-    setPerfil(response);
+  const cargarPerfil = () => {
+
+    const response = cargarPerfilRequest(user);
+ setPerfil(response);
   };
 
   return (
@@ -70,6 +69,7 @@ export const AuthProvider = ({ children }) => {
         login,
         loading,
         setIsAuthenticated,
+        cargarPerfil,
         perfil,
         setPerfil,
       }}
