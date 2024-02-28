@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
-import TrabajadorCard from "../components/TrabajadorCard";
-import { useTrabajadores } from "../context/TrabajadorContext";
+import TrabajadorCard from "./TrabajadorCard";
+import { useTrabajadores } from "../../context/TrabajadorContext";
 import { Link } from "react-router-dom";
 const ListadoTrabajadores = () => {
-  const { trabajadores,loadTrabajadores } = useTrabajadores();
-  
+  const { trabajadores, loadTrabajadores } = useTrabajadores();
 
   useEffect(() => {
     loadTrabajadores();
   }, []);
-
-
 
   return (
     <>
@@ -22,13 +19,15 @@ const ListadoTrabajadores = () => {
           Agregar Trabajador
         </button>
       </Link>
-     <div className="grid sm:grid-cols-1 gap-2 xl:grid-cols-4 pt-10">
-      {trabajadores.map((trabajador) => (
-        <TrabajadorCard trabajador={trabajador} key={trabajador.id} />
-      ))}
-    </div>
+      <div className="grid sm:grid-cols-1 gap-2 xl:grid-cols-4 pt-10">
+        {trabajadores.map((trabajador) => (
+          <TrabajadorCard
+            trabajador={trabajador}
+            key={trabajador.id_trabajador}
+          />
+        ))}
+      </div>
     </>
-   
   );
 };
 

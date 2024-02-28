@@ -23,6 +23,7 @@ const schema = Yup.object().shape({
 
 const ReservarForm = () => {
   const [producto, setProducto] = useState({
+    id_reserva:Date.now(),
     nombre_cliente: "",
     apellidos: "",
     ci: "",
@@ -34,12 +35,13 @@ const ReservarForm = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
-   
     try {
-      const reserva = [{ ...values,
-        id_producto: params.id_producto,
-      }];
+      console.log("sub");
+      const reserva = { ...values, id_producto: params.id_producto };
       crearReserva(reserva);
+      alert(
+        `Se ha creado su reserva para el día ${values.fecha_sesion} a nombre de la persona ${values.nombre_cliente} ${values.apellidos}`
+      );
     } catch (error) {
       console.log(error);
     }
@@ -65,6 +67,7 @@ const ReservarForm = () => {
             >
               <Input
                 name={"nombre_cliente"}
+                label={"Nombre"}
                 type={"text"}
                 value={values.nombre_cliente}
                 handleChange={handleChange}
@@ -72,6 +75,7 @@ const ReservarForm = () => {
               ></Input>
               <Input
                 name={"apellidos"}
+                label={"Apellidos"}
                 type={"text"}
                 value={values.apellidos}
                 handleChange={handleChange}
@@ -79,6 +83,7 @@ const ReservarForm = () => {
               ></Input>
               <Input
                 name={"ci"}
+                label={"Carne Identidad"}
                 type={"text"}
                 value={values.ci}
                 handleChange={handleChange}
@@ -87,6 +92,7 @@ const ReservarForm = () => {
 
               <Input
                 name={"telefono"}
+                label={"Teléfono Contacto"}
                 type={"text"}
                 value={values.telefono}
                 handleChange={handleChange}
@@ -95,18 +101,12 @@ const ReservarForm = () => {
 
               <Input
                 name={"fecha_sesion"}
+                label={"Fecha a Reservar"}
                 type={"date"}
                 value={values.fecha_sesion}
                 handleChange={handleChange}
                 errors={errors}
-              ></Input>
-
-              <Input
-                name={"pagoAnticipado"}
-                type={"checkbox"}
-                value={values.pagoAnticipado}
-                handleChange={handleChange}
-                errors={errors}
+             
               ></Input>
 
               <button

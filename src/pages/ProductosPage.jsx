@@ -8,13 +8,12 @@ const ProductosPage = () => {
 
   useEffect(() => {
     loadProductos();
-    console.log(productos);
   }, []);
 
   function renderMain() {
     if (productos.length === 0) return <h1>No hay productos</h1>;
     return productos.map((producto) => (
-      <ProductoCard producto={producto} key={producto.index} />
+      <ProductoCard producto={producto} key={producto.id_producto} />
     ));
   }
   return (

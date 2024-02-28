@@ -22,12 +22,10 @@ export const ProductoContextProvider = ({ children }) => {
         localStorage.setItem("productosDB", JSON.stringify(productosDB))
       );
     }
-
   };
 
   const deleteProducto = async (id_producto) => {
     try {
-      const response = await deleteProductoRequest(id_producto);
       setProductos(
         productos.filter((producto) => producto.id_producto !== id_producto)
       );
@@ -37,7 +35,6 @@ export const ProductoContextProvider = ({ children }) => {
     }
   };
   const createProducto = (values) => {
-    console.log(values);
     const elementosAnteriores =
       JSON.parse(localStorage.getItem("productosDB")) || [];
     elementosAnteriores.push(values); // No es necesario convertirlo a JSON aquí
@@ -46,19 +43,22 @@ export const ProductoContextProvider = ({ children }) => {
 
   const getProducto = async (id_producto) => {
     try {
-      const response = await getProductoRequest(id_producto);
+      const response = productos.filter(
+        (producto) => producto.id_producto == id_producto
+      );
 
-      return response.data;
+      return response[0];
     } catch (error) {
       console.error(error);
     }
   };
 
-  const updateProducto = async (id_producto, formData) => {
+  const updateProducto = async (id_producto, values) => {   
+    
     try {
-      const response = await updateProductoRequest(id_producto, formData);
-
-      return response.data;
+      const indice = productos.findIndex((producto) => producto.id_producto == id_producto);
+      productos[indice] = values;
+      localStorage.setItem("productosDB", JSON.stringify(productos));
     } catch (error) {
       console.error(error);
     }

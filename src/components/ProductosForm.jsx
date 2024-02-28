@@ -17,7 +17,7 @@ const ProductoForm = () => {
   const { createProducto, getProducto, updateProducto } = useProductos();
   const [file, setFile] = useState(null);
   const [producto, setProducto] = useState({
-    id_producto : Date.now(),
+    id_producto: Date.now(),
     nombre_producto: "",
     descripcion: "",
     precio_venta: "",
@@ -28,40 +28,20 @@ const ProductoForm = () => {
   const params = useParams();
   const navigate = useNavigate();
 
-  const handleSubmit = async (values) => {
-  
-    try {
-      if (params.id_producto) {
-        await updateProducto(params.id_producto, values);
-
-        alert("Se ha actualizado el producto");
-
-        
-      } else {
-        await createProducto(values);
-        alert("Se ha creado el producto correctamente");
-      
-      }
-    } catch (error) {
-      console.log(error);
-      alert("Error al actualizar producto  " + error);
-    }
-  };
-
   useEffect(() => {
     const loadProducto = async () => {
       if (params.id_producto) {
         const producto = await getProducto(params.id_producto);
-        console.log(producto);
+
         setProducto({
+          id_producto: producto.id_producto,
           nombre_producto: producto.nombre_producto,
           descripcion: producto.descripcion,
-          costo_unitario: producto.costo_unitario,
           precio_venta: producto.precio_venta,
-          categoria: producto.categoria,
-          stockMinimo: producto.stockMinimo,
-          unidadMedida: producto.unidadMedida,
+          formato_entrega: producto.formato_entrega,
+          locacion: producto.locacion,
         });
+
         (e) => {
           setFile(e.target.files[0]);
         };
@@ -69,6 +49,24 @@ const ProductoForm = () => {
     };
     loadProducto();
   }, []);
+  
+  const handleSubmit = async (values) => {
+    try {
+      if (params.id_producto) {
+        await updateProducto(params.id_producto, values);
+
+        alert("Se ha actualizado el producto");
+      } else {
+        await createProducto(values);
+
+        alert("Se ha creado el producto correctamente");
+      }
+      navigate("/productos");
+    } catch (error) {
+      console.log(error);
+      alert("Error al actualizar producto  " + error);
+    }
+  };
 
   return (
     <div className="mx-2 bg-neutral-200 rounded-md p-4">

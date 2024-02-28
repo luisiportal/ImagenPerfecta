@@ -8,7 +8,8 @@ import { loginRequest } from "../api/trabajador";
 import MostrarError from "./validacionForm/mostrarError";
 
 const Login = () => {
-  const { isAuthenticated, errors, login,setPerfil } = useAuth();
+  const { isAuthenticated, errors, login, setPerfil, setIsAuthenticated } =
+    useAuth();
   const [credencial_invalida, setCredencial_invalida] = useState(null);
   const navigate = useNavigate();
 
@@ -31,13 +32,11 @@ const Login = () => {
         })}
         onSubmit={async (values, { setSubmitting }) => {
           try {
-            const id_usuarioAutenticado = loginRequest(values);
-            console.log(id_usuarioAutenticado);
-            login(id_usuarioAutenticado);
-            
+            login(values);
 
-  
-          } catch (error) {}
+          } catch (error) {
+            alert("Ha ocurrido un error en la autenticación");
+          }
         }}
       >
         {({ isSubmitting, errors }) => (

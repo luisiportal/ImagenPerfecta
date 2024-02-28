@@ -16,13 +16,53 @@ export const TrabajadorContextProvider = ({ children }) => {
   const [trabajadores, setTrabajadores] = useState([]);
 
   async function loadTrabajadores() {
-    setTrabajadores(trabajadoresDB);
+    
+    if (localStorage.getItem("trabajadoresDB")) {
+      setTrabajadores(JSON.parse(localStorage.getItem("trabajadoresDB")));
+    } else {
+      setTrabajadores(
+        localStorage.setItem("trabajadoresDB", JSON.stringify(trabajadoresDB))
+      );
+    }
+
+
+
   }
 
-  const deleteTrabajador = async (id) => {
+  const createTrabajador = (values) => {
+    const elementosAnteriores =
+      JSON.parse(localStorage.getItem("trabajadoresDB")) || [];
+    elementosAnteriores.push(values); // No es necesario convertirlo a JSON aquí
+    localStorage.setItem("trabajadoresDB", JSON.stringify(elementosAnteriores));
+  };
+
+  const getTrabajador = async (id_trabajador) => {
+    try {
+      const response = trabajadores.filter(
+        (trabajador) => trabajador.id_trabajador == id_trabajador
+      );
+
+      return response[0];
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateTrabajador = async (id_trabajador, values) => {   
+    
+    try {
+      const indice = trabajadores.findIndex((trabajador) => trabajador.id_trabajador == id_trabajador);
+      trabajadores[indice] = values;
+      localStorage.setItem("trabajadoresDB", JSON.stringify(trabajadores));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteTrabajador = async (id_trabajador) => {
     try {
       setTrabajadores(
-        trabajadores.filter((trabajador) => trabajador.id !== id)
+        trabajadores.filter((trabajador) => trabajador.id_trabajador !== id_trabajador)
       );
       alert("Se ha eliminado el trabajador correctamente");
     } catch (error) {
@@ -36,6 +76,9 @@ export const TrabajadorContextProvider = ({ children }) => {
         deleteTrabajador,
         loadTrabajadores,
         trabajadores,
+        createTrabajador,
+        getTrabajador,
+        updateTrabajador,
       }}
     >
       {children}

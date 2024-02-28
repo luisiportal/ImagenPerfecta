@@ -18,6 +18,7 @@ const Navbar = ({ hidden }) => {
             <ElementoNavbar nombre={"Productos"} href={"/productos"} />
             <ElementoNavbar nombre={"Trabajadores"}  href={"/trabajador/plantilla"} />
             <ElementoNavbar nombre={"Tareas"}  href={"/tareas"} />
+            <ElementoNavbar nombre={"Reservas"}  href={"/cliente/reservas"} />
 
           </>
         ) : (

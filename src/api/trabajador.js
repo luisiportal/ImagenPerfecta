@@ -4,7 +4,6 @@ import { usuariosDB } from "../db/usuarios";
 // usuarios
 export const registerRequest = async (values) => {
   const trabajadoresJSON = JSON.stringify(values);
-  console.log(trabajadoresJSON);
   localStorage.setItem("trabajador999", trabajadoresJSON);
 };
 
@@ -21,7 +20,7 @@ export const loginRequest = (values) => {
   if (usuarioEncontrado) {
     if (usuarioEncontrado.password === contrasenaIngresada) {
       console.log("Inicio de sesión exitoso");
-      return usuarioEncontrado.id;
+      return usuarioEncontrado;
     } else {
       console.log("Contraseña incorrecta");
     }
@@ -34,12 +33,10 @@ export const loginRequest = (values) => {
 
 //perfil
 export const cargarPerfilRequest = (id) => {
-  console.log('id');
-  console.log(id);
+
   const usuarioEncontrado = trabajadoresDB.find(
     (user) => user.id_usuario === id
   );
-  console.log(usuarioEncontrado);
   return usuarioEncontrado;
 };
 

@@ -10,7 +10,6 @@ const PerfilTrabajador = () => {
 
   const navigate = useNavigate();
   const params = useParams();
-  console.log(perfil);
 
   return (
     <div>

@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTrabajadores } from "../context/TrabajadorContext";
+import { useTrabajadores } from "../../context/TrabajadorContext";
 
 const TrabajadorCard = ({ trabajador }) => {
   const [showBotones, setShowBotones] = useState(false);
@@ -27,7 +27,7 @@ const TrabajadorCard = ({ trabajador }) => {
           <div className="mx-auto w-32 h-32 relative -mt-28 border-4 border-white rounded-full overflow-hidden">
             <img
               className="object-cover object-center h-32"
-              src={"../images/trabajadores/perfil/" + trabajador.foto_perfil}
+              src={`../images/trabajadores/perfil/${trabajador.foto_perfil || "fotoPerfil.jpg"}`}
               alt="Foto de perfil"
             />
           </div>
@@ -37,7 +37,7 @@ const TrabajadorCard = ({ trabajador }) => {
             </h2>
             <p className="text-gray-500">CI :{trabajador.ci}</p> 
             <p className="text-gray-500">Puesto :{trabajador.puesto}</p>
-            <p className="text-gray-500">Movil : {trabajador.movil}</p>
+            <p className="text-gray-500">Telefono : {trabajador.telefono}</p>
             <p className="text-gray-500">Direccion : {trabajador.direccion}</p>
             <p className="text-gray-500">Salario : {trabajador.salario} cup</p>
             {showBotones && (
@@ -45,7 +45,7 @@ const TrabajadorCard = ({ trabajador }) => {
                 <div className="bg-slate-700 px-2 py-1 font-bold text-white rounded hover:bg-huellas_color">
                   <button
                     className=""
-                    onClick={() => deleteTrabajador(trabajador.id)}
+                    onClick={() => deleteTrabajador(trabajador.id_trabajador)}
                   >
                     Eliminar
                   </button>
@@ -55,7 +55,7 @@ const TrabajadorCard = ({ trabajador }) => {
                   <button
                     className="bg-slate-700 px-2 py-1 font-bold text-white rounded hover:bg-huellas_color"
                     onClick={() =>
-                      navigate(`../trabajador/profile/edit/${trabajador.id}`)
+                      navigate(`../profile/edit/${trabajador.id_trabajador}`)
                     }
                   >
                     Editar

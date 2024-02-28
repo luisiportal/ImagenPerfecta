@@ -8,7 +8,15 @@ const ListarReservas = () => {
   const [reservas, setReservas] = useState([]);
 
   useEffect(() => {
-    setReservas(reservasDB)
+
+    if (localStorage.getItem("reservasDB")) {
+      setReservas(JSON.parse(localStorage.getItem("reservasDB")));
+    } else {
+      setReservas(
+        localStorage.setItem("reservasDB", JSON.stringify(reservasDB))
+      );
+    }
+
   }, []);
 
   return (
