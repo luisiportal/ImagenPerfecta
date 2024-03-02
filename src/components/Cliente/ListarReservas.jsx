@@ -2,20 +2,14 @@ import React from "react";
 import { reservasDB } from "../../db/reservas";
 import { useState,useEffect } from "react";
 import ListarReservasCard from "./ListarReservasCard";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 
 const ListarReservas = () => {
   const [reservas, setReservas] = useState([]);
 
   useEffect(() => {
-
-    if (localStorage.getItem("reservasDB")) {
-      setReservas(JSON.parse(localStorage.getItem("reservasDB")));
-    } else {
-      setReservas(
-        localStorage.setItem("reservasDB", JSON.stringify(reservasDB))
-      );
-    }
+setReservas(useLocalStorage("reservasDB",reservasDB))
 
   }, []);
 

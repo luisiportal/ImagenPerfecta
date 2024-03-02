@@ -18,7 +18,7 @@ export const reservasDB = [
     id_producto: 3,
   },
   {
-    id_reserva: "78",
+    id_reserva: 78,
     nombre_cliente: "Esteban",
     apellidos: "Quiroz",
     ci: "92011543229",

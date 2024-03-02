@@ -36,7 +36,6 @@ const ReservarForm = () => {
 
   const handleSubmit = async (values) => {
     try {
-      console.log("sub");
       const reserva = { ...values, id_producto: params.id_producto };
       crearReserva(reserva);
       alert(

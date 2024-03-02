@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { trabajadoresDB } from "../db/trabajadores";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 
 export const TrabajadorContext = createContext();
@@ -13,18 +14,11 @@ export const useTrabajadores = () => {
 };
 
 export const TrabajadorContextProvider = ({ children }) => {
-  const [trabajadores, setTrabajadores] = useState([]);
+  const [trabajadores, setTrabajadores] = useState(trabajadoresDB);
 
   async function loadTrabajadores() {
     
-    if (localStorage.getItem("trabajadoresDB")) {
-      setTrabajadores(JSON.parse(localStorage.getItem("trabajadoresDB")));
-    } else {
-      setTrabajadores(
-        localStorage.setItem("trabajadoresDB", JSON.stringify(trabajadoresDB))
-      );
-    }
-
+  setTrabajadores(useLocalStorage("trabajadoresDB",trabajadoresDB))
 
 
   }

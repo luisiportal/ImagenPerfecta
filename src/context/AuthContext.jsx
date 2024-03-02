@@ -69,7 +69,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    console.log(user);
     localStorage.removeItem("user", user);
     setIsAuthenticated(false);
   };

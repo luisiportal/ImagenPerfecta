@@ -9,6 +9,7 @@ import TrabajadorRoutes from "./routes/TrabajadorRoutes";
 import ProductosRoutes from "./routes/ProductosRoutes";
 import ClienteRoutes from "./routes/ClienteRoutes";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
+import { ProductoContextProvider } from "./context/ProductoProvider";
 
 const App = () => {
   return (
@@ -19,8 +20,12 @@ const App = () => {
         </nav>
 
         <div className="container mx-auto">
+          <ProductoContextProvider>
+
+         
           <Routes>
             <Route path="/" element={<PaginaInicio />} />
+            
             <Route path="/trabajador/login" element={<Trabajador />} />
             <Route path="*" element={<NotFound />} />
             <Route path="prueba" element={<Prueba></Prueba>} />
@@ -36,6 +41,7 @@ const App = () => {
 
           
           </Routes>
+          </ProductoContextProvider>
         </div>
       </AuthProvider>
     </div>

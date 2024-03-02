@@ -1,81 +1,39 @@
-import { useProductos } from "../context/ProductoProvider.jsx";
-import { useNavigate, Link } from "react-router-dom";
-import { useState } from "react";
-import UbicacionSVG from "./SVG/UbicacionSVG.jsx";
-import EntregaSVG from "./SVG/EntregaSVG.jsx";
-import { useParams } from "react-router-dom";
+
+import ReservarBtn from "./LanginPage/ReservarBtn.jsx";
+import Edit_ElimBTN from "./LanginPage/Edit_ElimBTN.jsx";
 
 function ProductoCard({ producto }) {
-  const [showBotones, setShowBotones] = useState(false);
 
-  const { deleteProducto } = useProductos();
-  const navigate = useNavigate();
-
-  const handleMouseEnter = () => {
-    setShowBotones(true);
-  };
-
-  const handleMouseLeave = () => {
-    setShowBotones(false);
-  };
-  const params = useParams();
   return (
-    <div
-      className={`mx-4 md:mx-1 my-1 bg-neutral-200  shadow rounded overflow-hidden p-2 hover:bg-huellas_color transition-all duration-500 ease-in-out cursor-pointer `}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <Link to={"/new"}>
-        <button className="fixed  md:hidden bottom-5 right-8 bg-huellas_color hover:bg-slate-700 text-white font-extrabold py-10 px-10 rounded-full h-8 w-8 text-4xl flex justify-center items-center">
-          +
-        </button>
-      </Link>
-      <section className="flex flex-col h-72 text-slate-800 m-2">
-        <div className="flex justify-between font-bold pb-3">
-          <h2>{producto.nombre_producto}</h2>
-          <h2 className="text-2xl">{producto.precio_venta} cup</h2>
+    <div className={`bg-white shadow`}>
+      <section className="flex flex-col text-he_card">
+        <div className="bg-he_card text-white h-24 items-center flex">
+          <div className="flex-1 relative">
+            <div className=" bg-orange-500 atravezado  absolute z-50 right-0 h-72">
+              <h3 className="rotar-36 rotate-45 pl-6 ml-2 relative top-4 ">
+                FOTOBOOK
+              </h3>
+            </div>
+            <h2 className="font-bold flex justify-center text-2xl">
+              {producto.nombre_producto}
+            </h2>
+            <h4 className="flex justify-center font-semibold">20 Fotos</h4>
+          </div>
         </div>
 
-        <p className="text-justify flex-grow">{producto.descripcion}</p>
-
-        <section className="">
-          <div className="flex gap-1">
-            <UbicacionSVG /> <h2>{producto.locacion}</h2>
-          </div>
-          <div className="flex gap-1">
-            <EntregaSVG /> <h2>{producto.formato_entrega}</h2>
-          </div>
-        </section>
+        <h2 className="flex justify-center text-7xl font-bold p-5">
+          ${producto.precio_venta}
+        </h2>
+        <div className="flex flex-col">
+          <h4 className="flex justify-center text-2xl -mt-4">CUP</h4>
+          <h4 className="flex justify-center p-5 text-2xl">Ampliacion 20x24</h4>
+          <h4 className="flex justify-center p-5 text-2xl">Llavero</h4>
+          <p className="text-justify flex-grow p-5">{producto.descripcion}</p>
+          <div className=""><ReservarBtn id_producto={producto.id_producto} /></div>
+        </div>
+        
       </section>
-      {window.location.pathname === "/productos" && (
-        <section
-          className={`flex gap-x-1 transition-all duration-500 ease-in-out`}
-        >
-          <div className="bg-slate-700 px-2 py-1 font-bold text-white rounded hover:bg-slate-900 transition-all duration-500 ease-in-out">
-            <button onClick={() => deleteProducto(producto.id_producto)}>
-              Eliminar
-            </button>
-          </div>
-          <div className="bg-slate-700 px-2 py-1 font-bold text-white rounded hover:bg-slate-900 transition-all duration-500 ease-in-out">
-            <button onClick={() => navigate(`edit/${producto.id_producto}`)}>
-              Editar
-            </button>
-          </div>
-        </section>
-      )}
-      {window.location.pathname === "/cliente" && (
-        <section className="flex justify-end gap-x-1 transition-all duration-500 ease-in-out">
-          <div className="bg-slate-700 px-2 py-1 font-bold text-white rounded hover:bg-slate-900 transition-all duration-500 ease-in-out">
-          <button
-            onClick={() => {
-              navigate(`/cliente/reservar/${producto.id_producto}`);
-            }}
-          >
-            Reservar
-          </button>
-        </div>
-        </section>
-      )}
+      <Edit_ElimBTN id_producto={producto.id_producto} />
     </div>
   );
 }

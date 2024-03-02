@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 
 import { ProductoContext } from "./ProductoContext";
 import { productosDB } from "../db/productos";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 export const useProductos = () => {
   const context = useContext(ProductoContext);
@@ -14,14 +15,8 @@ export const useProductos = () => {
 export const ProductoContextProvider = ({ children }) => {
   const [productos, setProductos] = useState([]);
 
-  const loadProductos = () => {
-    if (localStorage.getItem("productosDB")) {
-      setProductos(JSON.parse(localStorage.getItem("productosDB")));
-    } else {
-      setProductos(
-        localStorage.setItem("productosDB", JSON.stringify(productosDB))
-      );
-    }
+  const loadProductos = async () => {
+    setProductos(useLocalStorage("productosDB",productosDB));
   };
 
   const deleteProducto = async (id_producto) => {
@@ -34,7 +29,7 @@ export const ProductoContextProvider = ({ children }) => {
       console.error(error);
     }
   };
-  const createProducto = (values) => {
+  const createProducto = async (values) => {
     const elementosAnteriores =
       JSON.parse(localStorage.getItem("productosDB")) || [];
     elementosAnteriores.push(values); // No es necesario convertirlo a JSON aquí
@@ -53,10 +48,11 @@ export const ProductoContextProvider = ({ children }) => {
     }
   };
 
-  const updateProducto = async (id_producto, values) => {   
-    
+  const updateProducto = async (id_producto, values) => {
     try {
-      const indice = productos.findIndex((producto) => producto.id_producto == id_producto);
+      const indice = productos.findIndex(
+        (producto) => producto.id_producto == id_producto
+      );
       productos[indice] = values;
       localStorage.setItem("productosDB", JSON.stringify(productos));
     } catch (error) {

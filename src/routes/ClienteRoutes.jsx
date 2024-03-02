@@ -9,6 +9,7 @@ const ClienteRoutes = () => {
   return (
     <ProductoContextProvider>
  <Routes>
+  
       <Route path="/" element={<Cliente />} />
       <Route path="/reservar/:id_producto" element={<ReservarForm />} />
       <Route path="/reservas" element={<ListarReservas />} />
