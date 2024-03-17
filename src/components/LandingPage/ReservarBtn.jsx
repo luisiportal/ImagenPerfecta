@@ -8,7 +8,7 @@ const ReservarBtn = ({id_producto}) => {
         
         {window.location.pathname !== "/productos" && (
         <section className="flex justify-center gap-x-1 transition-all duration-500 ease-in-out">
-          <div className="bg-orange-500 px-10 py-3 mb-5 mt-4 font-bold  text-white rounded hover:bg-orange-700 transition-all duration-500 ease-in-out">
+          <div className="bg-huellas_color px-10 py-3 mb-5 mt-4 font-bold  text-white rounded hover:bg-amber-600 transition-all duration-500 ease-in-out">
             <button
               onClick={() => {
                 navigate(`/cliente/reservar/${id_producto}`);

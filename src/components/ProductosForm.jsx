@@ -4,6 +4,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import Input from "./formulario/Input";
+import {
+  actualizarProductoRequest,
+  crearProductoRequest,
+  listarunProductoRequest,
+} from "../api/productos.api";
 
 const schema = Yup.object().shape({
   nombre_producto: Yup.string().required("Nombre producto requerido"),
@@ -14,7 +19,7 @@ const schema = Yup.object().shape({
 });
 
 const ProductoForm = () => {
-  const { createProducto, getProducto, updateProducto } = useProductos();
+  const { getProducto, updateProducto } = useProductos();
   const [file, setFile] = useState(null);
   const [producto, setProducto] = useState({
     id_producto: Date.now(),
@@ -31,7 +36,8 @@ const ProductoForm = () => {
   useEffect(() => {
     const loadProducto = async () => {
       if (params.id_producto) {
-        const producto = await getProducto(params.id_producto);
+        const producto = await listarunProductoRequest(params.id_producto);
+  
 
         setProducto({
           id_producto: producto.id_producto,
@@ -49,15 +55,15 @@ const ProductoForm = () => {
     };
     loadProducto();
   }, []);
-  
+
   const handleSubmit = async (values) => {
     try {
       if (params.id_producto) {
-        await updateProducto(params.id_producto, values);
+        await actualizarProductoRequest(params.id_producto, values);
 
         alert("Se ha actualizado el producto");
       } else {
-        await createProducto(values);
+        await crearProductoRequest(values);
 
         alert("Se ha creado el producto correctamente");
       }
@@ -70,7 +76,7 @@ const ProductoForm = () => {
 
   return (
     <div className="mx-2 bg-neutral-200 rounded-md p-4">
-      <h1 className="text-sm font-bold text-white">
+      <h1 className="flex justify-center pt-5 text-slate-500 font-bold text-2xl lg:text-4xl">
         {params.id_producto ? "Editar Producto" : "Agregar producto"}
       </h1>
 

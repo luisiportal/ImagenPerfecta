@@ -1,7 +1,10 @@
 import { createContext, useContext, useState } from "react";
-import { trabajadoresDB } from "../db/trabajadores";
-import { useLocalStorage } from "../hooks/useLocalStorage";
-
+import { useParams } from "react-router-dom";
+import {
+  eliminarTrabajadorRequest,
+  listarTrabajadoresRequest,
+  listarunTrabajadorRequest,
+} from "../api/trabajador.api";
 
 export const TrabajadorContext = createContext();
 
@@ -14,49 +17,56 @@ export const useTrabajadores = () => {
 };
 
 export const TrabajadorContextProvider = ({ children }) => {
-  const [trabajadores, setTrabajadores] = useState(trabajadoresDB);
+  const [trabajadores, setTrabajadores] = useState([]);
+  const [perfil, setPerfil] = useState({
+    usuario: "",
+    password: "",
+    nombre: "",
+    apellidos: "",
+    ci: "",
+    telefono: "",
+    puesto: "",
+    direccion: "",
+    salario: "",
+    foto_perfil: "",
+  });
 
-  async function loadTrabajadores() {
-    
-  setTrabajadores(useLocalStorage("trabajadoresDB",trabajadoresDB))
+  const params = useParams();
 
+  const loadTrabajadoresContext = async () => {
+    try {
+      const response = await listarTrabajadoresRequest();
 
-  }
-
-  const createTrabajador = (values) => {
-    const elementosAnteriores =
-      JSON.parse(localStorage.getItem("trabajadoresDB")) || [];
-    elementosAnteriores.push(values); // No es necesario convertirlo a JSON aquí
-    localStorage.setItem("trabajadoresDB", JSON.stringify(elementosAnteriores));
+      setTrabajadores(response);
+    } catch (error) {}
   };
 
-  const getTrabajador = async (id_trabajador) => {
-    try {
-      const response = trabajadores.filter(
-        (trabajador) => trabajador.id_trabajador == id_trabajador
-      );
-
-      return response[0];
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const updateTrabajador = async (id_trabajador, values) => {   
-    
-    try {
-      const indice = trabajadores.findIndex((trabajador) => trabajador.id_trabajador == id_trabajador);
-      trabajadores[indice] = values;
-      localStorage.setItem("trabajadoresDB", JSON.stringify(trabajadores));
-    } catch (error) {
-      console.error(error);
-    }
+  const loadTrabajador = async (id_trabajador) => {
+    const trabajador = await listarunTrabajadorRequest(id_trabajador);
+    setPerfil({
+      usuario: trabajador.usuario,
+      password: trabajador.passwordHash,
+      nombre: trabajador.nombre,
+      apellidos: trabajador.apellidos,
+      ci: trabajador.ci,
+      telefono: trabajador.telefono,
+      puesto: trabajador.puesto,
+      direccion: trabajador.direccion,
+      salario: trabajador.salario,
+      foto_perfil: trabajador.foto_perfil,
+    });
+    (e) => {
+      setFile(e.target.files[0]);
+    };
   };
 
   const deleteTrabajador = async (id_trabajador) => {
     try {
+      eliminarTrabajadorRequest(id_trabajador);
       setTrabajadores(
-        trabajadores.filter((trabajador) => trabajador.id_trabajador !== id_trabajador)
+        trabajadores.filter(
+          (trabajador) => trabajador.id_trabajador !== id_trabajador
+        )
       );
       alert("Se ha eliminado el trabajador correctamente");
     } catch (error) {
@@ -68,11 +78,10 @@ export const TrabajadorContextProvider = ({ children }) => {
     <TrabajadorContext.Provider
       value={{
         deleteTrabajador,
-        loadTrabajadores,
+        loadTrabajadoresContext,
         trabajadores,
-        createTrabajador,
-        getTrabajador,
-        updateTrabajador,
+        perfil,
+        loadTrabajador,
       }}
     >
       {children}

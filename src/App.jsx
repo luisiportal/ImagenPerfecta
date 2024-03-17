@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import NotFound from "./pages/NotFound";
 import NavbarComponent from "./components/NavbarComponent";
-import Prueba from "./pages/Prueba";
+
 import { AuthProvider } from "./context/AuthContext";
 import Trabajador from "./pages/TrabajadorPage";
 import PaginaInicio from "./pages/PaginaInicio";
@@ -10,39 +10,44 @@ import ProductosRoutes from "./routes/ProductosRoutes";
 import ClienteRoutes from "./routes/ClienteRoutes";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import { ProductoContextProvider } from "./context/ProductoProvider";
+import Servicios from "./pages/Servicios";
+import Galeria from "./pages/Galeria";
+import {
+  TrabajadorContext,
+  TrabajadorContextProvider,
+} from "./context/TrabajadorContext";
+import Ventas from "./pages/Ventas";
 
 const App = () => {
   return (
     <div className="bg-white min-h-screen">
       <AuthProvider>
-        <nav>
-          <NavbarComponent />
-        </nav>
+        <TrabajadorContextProvider>
+          <nav>
+            <NavbarComponent />
+          </nav>
 
-        <div className="container mx-auto">
-          <ProductoContextProvider>
+          <div className="mx-auto">
+            <ProductoContextProvider>
+              <Routes>
+                <Route path="/" element={<PaginaInicio />} />
+                <Route path="/servicios" element={<Servicios />} />
+                <Route path="/galeria" element={<Galeria />} />
 
-         
-          <Routes>
-            <Route path="/" element={<PaginaInicio />} />
-            
-            <Route path="/trabajador/login" element={<Trabajador />} />
-            <Route path="*" element={<NotFound />} />
-            <Route path="prueba" element={<Prueba></Prueba>} />
-            <Route path="/cliente/*" element={<ClienteRoutes />} />
-           
-           
+                <Route path="/trabajador/login" element={<Trabajador />} />
+                <Route path="*" element={<NotFound />} />
 
-           
-            <Route element={<ProtectedRoutes></ProtectedRoutes>}>
-              <Route path="/productos/*" element={<ProductosRoutes />} />
-              <Route path="/trabajador/*" element={<TrabajadorRoutes />} />
-            </Route>
+                <Route path="/cliente/*" element={<ClienteRoutes />} />
 
-          
-          </Routes>
-          </ProductoContextProvider>
-        </div>
+                <Route element={<ProtectedRoutes></ProtectedRoutes>}>
+                  <Route path="/productos/*" element={<ProductosRoutes />} />
+                  <Route path="/ventas" element={<Ventas></Ventas>} />
+                  <Route path="/trabajador/*" element={<TrabajadorRoutes />} />
+                </Route>
+              </Routes>
+            </ProductoContextProvider>
+          </div>
+        </TrabajadorContextProvider>
       </AuthProvider>
     </div>
   );

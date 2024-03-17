@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import ProductoCard from "../components/ProductoCard";
 import { useProductos } from "../context/ProductoProvider";
 import { Link } from "react-router-dom";
+import AgregarSVG from "../components/SVG/AgregarSVG";
 
 const ProductosPage = () => {
   const { productos, loadProductos } = useProductos();
@@ -18,16 +19,19 @@ const ProductosPage = () => {
   }
   return (
     <div>
-      <h1 className=" px-2 pb-2 text-3xl text-slate-700 font-bold">
+      <section className="flex justify-center">
+      <h1 className="flex justify-center pt-5 text-slate-500 font-bold text-4xl">
         Productos
       </h1>
       <Link to={"/productos/new"}>
-        <button className="bg-huellas_color font-bold text-white rounded-full px-5 py-1 align-middle">
-          Agregar Producto
+        <button className="text-slate-500 font-bold w-16 h-16 flex justify-center items-center">
+          <AgregarSVG/>
         </button>
       </Link>
+      </section>
+      
 
-      <div className="grid sm:grid-cols-1 gap-2 xl:grid-cols-4 mt-8 ">
+      <div className="grid sm:grid-cols-1 gap-2 xl:grid-cols-4 mt-8  px-3 bg-sect_gray">
         {renderMain()}
       </div>
     </div>

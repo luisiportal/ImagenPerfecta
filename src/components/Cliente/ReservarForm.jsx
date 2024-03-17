@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import * as Yup from "yup";
 import Input from "../formulario/Input";
-import { crearReserva } from "../../api/reservas";
+import { crearReservaRequest } from "../../api/reservas.api";
 
 const schema = Yup.object().shape({
   nombre_cliente: Yup.string()
@@ -22,25 +22,24 @@ const schema = Yup.object().shape({
 });
 
 const ReservarForm = () => {
+  const params = useParams();
   const [producto, setProducto] = useState({
-    id_reserva:Date.now(),
     nombre_cliente: "",
     apellidos: "",
     ci: "",
     telefono: "",
     fecha_sesion: "",
-    id_producto: "",
+    id_producto: params.id_producto,
   });
-  const params = useParams();
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const handleSubmit = async (values) => {
     try {
-      const reserva = { ...values, id_producto: params.id_producto };
-      crearReserva(reserva);
+      crearReservaRequest(values);
       alert(
         `Se ha creado su reserva para el día ${values.fecha_sesion} a nombre de la persona ${values.nombre_cliente} ${values.apellidos}`
       );
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -48,9 +47,8 @@ const ReservarForm = () => {
 
   return (
     <div className="mx-2 bg-neutral-200 rounded-md p-4">
-      <h2>Ofertas</h2>
-      <h1 className="text-sm font-bold text-white">
-        {params.id_producto ? "Editar Producto" : "Agregar producto"}
+      <h1 className="flex justify-center pt-5 text-slate-500 font-bold text-4xl">
+        Reserva
       </h1>
 
       <div className="mt-8">
@@ -105,7 +103,6 @@ const ReservarForm = () => {
                 value={values.fecha_sesion}
                 handleChange={handleChange}
                 errors={errors}
-             
               ></Input>
 
               <button

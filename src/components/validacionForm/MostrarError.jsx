@@ -1,11 +1,14 @@
-import React from 'react'
+import React from "react";
 
-const MostrarError = ({errors,campo,touched}) => {
+const MostrarError = ({ errors, campo }) => {
   return (
-    <div> {errors[campo] && (
+    <div>
+      {" "}
+      {errors[campo] && (
         <span className="bg-red-500 p-1 m-1 rounded">{errors[campo]}</span>
-      )}</div>
-  )
-}
+      )}
+    </div>
+  );
+};
 
-export default MostrarError
+export default MostrarError;

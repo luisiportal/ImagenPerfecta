@@ -7,18 +7,11 @@ import ReservarBTN from "./navbar/ReservarBTN";
 
 const NavbarComponent = () => {
   const [abrirHamburguesa, setabrirHamburguesa] = useState(false);
-  const { logout, user } = useAuth();
+  const { logout,perfil,isAuthenticated } = useAuth();
 
-  const [perfil, setPerfil] = useState({
-    username: "",
-    nombre: "",
-    apellidos: "",
-    movil: "",
-    puesto: "",
-  });
 
-  const sidebarRef = useRef(null);
-  const openButtonRef = useRef(null);
+  const sidebarRef = useRef(false);
+  const openButtonRef = useRef(false);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -48,8 +41,7 @@ const NavbarComponent = () => {
   };
   return (
     <nav className="flex justify-between items-center lg:justify-center sticky top-0 left-0 w-full bg-white px-6 z-50 rounded shadow-xl">
-      <div>
-        {" "}
+      <div ref={openButtonRef}>
         <button
           onClick={hamburguerClick}
           className="mt-1 text-slate-700 border-black hover:bg-huellas_color hover:text-slate-100 rounded p-1 -m-1 transition-colors focus:ring-2 focus:ring-slate-200 lg:hidden"
@@ -65,6 +57,7 @@ const NavbarComponent = () => {
           abrirHamburguesa={abrirHamburguesa}
           perfil={perfil}
           logout={logout}
+          isAuthenticated={isAuthenticated}
         ></BarraMovil>
       </div>
     </nav>

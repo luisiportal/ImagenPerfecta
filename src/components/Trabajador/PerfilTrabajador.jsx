@@ -1,41 +1,41 @@
 import React, { useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { listarunTrabajadorRequest } from "../../api/trabajador.api";
+import { useTrabajadores } from "../../context/TrabajadorContext";
 
 const PerfilTrabajador = () => {
-  const { logout, perfil, cargarPerfil } = useAuth();
-  useEffect(() => {
-    cargarPerfil();
-  }, []);
+  const { logout, user } = useAuth();
+  const { loadTrabajador,perfil} = useTrabajadores();
 
   const navigate = useNavigate();
   const params = useParams();
 
+  useEffect(() => {
+    loadTrabajador(user.id_trabajador);
+   
+  }, []);
+
   return (
     <div>
       <div className="pt-24">
-        <div className=" min-h-80 max-w-2xl mx-4 sm:max-w-sm md:max-w-sm lg:max-w-sm xl:max-w-sm sm:mx-auto md:mx-auto lg:mx-auto xl:mx-auto bg-neutral-200 shadow-xl rounded-lg text-gray-900">
-          <div className="rounded-t-lg h-32 overflow-hidden">
-            <img
-              className="object-cover object-top w-full"
-              src={"../images/trabajadores/portada/" + perfil.foto_portada}
-              alt="Foto portada"
-            />
-          </div>
-          <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden">
-            <img
-              className="object-cover object-center h-32"
-              src={"../images/trabajadores/perfil/" + perfil.foto_perfil}
-              alt="Foto de perfil"
-            />
+        <div className="min-h-80 max-w-2xl sm:max-w-sm md:max-w-sm lg:max-w-sm xl:max-w-sm sm:mx-auto md:mx-auto lg:mx-auto xl:mx-auto bg-neutral-200 shadow-xl rounded-lg text-gray-900">
+          <div className="pt-10">
+            <div className="mx-auto w-32 h-32  border-4 border-white rounded-full overflow-hidden">
+              <img
+                className="object-cover object-center h-32"
+                src={`../images/trabajadores/perfil/${perfil.foto_perfil}`}
+                alt="Foto de perfil"
+              />
+            </div>
           </div>
           <div className="flex justify-center">
             <button
               onClick={() =>
-                navigate(`../trabajador/profile/edit/${perfil.id}`)
+                navigate(`../trabajador/profile/edit/${perfil.id_trabajador}`)
               }
             >
-              {" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -57,8 +57,8 @@ const PerfilTrabajador = () => {
             <h2 className="font-semibold">
               Nombre : {`${perfil.nombre} ${perfil.apellidos}`}
             </h2>
-            <p className="text-gray-500">Puesto :{perfil.puesto}</p>
-            <p className="text-gray-500">Movil : {perfil.movil}</p>
+            <p className="text-gray-500">Puesto : {perfil.puesto}</p>
+            <p className="text-gray-500">Movil : {perfil.telefono}</p>
             <p className="text-gray-500">Direccion : {perfil.direccion}</p>
             <p className="text-gray-500">Salario : {perfil.salario} cup</p>
           </div>

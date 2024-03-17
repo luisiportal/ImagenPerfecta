@@ -8,7 +8,7 @@ export const trabajadoresDB = [
     puesto: "Mantenimiento",
     direccion: "Calle 6 #11 Reparto Versalles",
     salario: 31000,
-    foto_perfil: "jorgeRepartidor.jpg",
+    foto_perfil: "jorgerepartidor.jpg",
     id_usuario: 1,
   },
   {

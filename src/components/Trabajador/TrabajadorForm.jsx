@@ -4,70 +4,77 @@ import { useParams, useNavigate } from "react-router-dom";
 import Input from "../formulario/Input";
 import { useTrabajadores } from "../../context/TrabajadorContext";
 import { schemaTrabajadores } from "../validacionForm/schemaTrabajadores";
+import {
+  crearTrabajadoresRequest,
+  editarTrabajadoresRequest,
+} from "../../api/trabajador.api";
+import Notificacion from "../validacionForm/Notificacion";
 
 const TrabajadorForm = () => {
-  const { createTrabajador,getTrabajador,updateTrabajador} = useTrabajadores();
+  const { loadTrabajador,perfil } = useTrabajadores();
   const params = useParams();
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
-
-  const [perfil, setPerfil] = useState({
-    id_trabajador: Date.now(),
-    username: "",
-    password: "",
-    nombre: "",
-    apellidos: "",
-    ci: "",
-    telefono: "",
-    puesto: "",
-    direccion: "",
-    salario: "",
-  });
+  const [notificacion_msg, setNotificacion_msg] = useState(null);
+ 
   useEffect(() => {
-    const loadTrabajador = async () => {
-      if (params.id) {
-        const trabajador = await getTrabajador(params.id);
-        setPerfil({
-          id_trabajador:trabajador.id_trabajador,
-          username: trabajador.username,
-          password: "trabajador.data.password",
-          nombre: trabajador.nombre,
-          apellidos: trabajador.apellidos,
-          telefono: trabajador.telefono,
-          puesto: trabajador.puesto,
-          direccion: trabajador.direccion,
-          salario: trabajador.salario,
-        });
-        (e) => {
-          setFile(e.target.files[0]);
-        };
-      }
-    };
-    loadTrabajador();
+  
+     loadTrabajador(params.id);
+    
+    
   }, []);
 
   const handleSubmit = async (values) => {
+    const formData = new FormData();
+    formData.append("usuario", values.usuario);
+    formData.append("password", values.password);
+    formData.append("nombre", values.nombre);
+    formData.append("apellidos", values.apellidos);
+    formData.append("ci", values.ci);
+    formData.append("telefono", values.telefono);
+    formData.append("puesto", values.puesto);
+    formData.append("direccion", values.direccion);
+    formData.append("salario", values.salario);
+
+    if (file !== null) {
+      formData.append("imagenPerfil", file);
+    }
+
     try {
       if (params.id) {
-        await updateTrabajador(params.id, values);
-
-        alert("Se han actualizado los datos");
-
-        navigate("/trabajador/plantilla");
+        console.log(formData);
+        const response = await editarTrabajadoresRequest(formData, params.id);
+        if (response) {
+          setNotificacion_msg({
+            mensaje: "Datos actualizados",
+            errorColor: false,
+          });
+        }
       } else {
-        await createTrabajador(values);
-
-        alert("Se ha agregado un nuevo trabajador correctamente");
-        navigate("/trabajador/plantilla");
+      
+        const { data } = await crearTrabajadoresRequest(formData);
+        setNotificacion_msg({
+          mensaje: "Usuario creado correctamente",
+          errorColor: false,
+        });
       }
+
+      setTimeout(() => {
+        navigate("/trabajador/plantilla");
+      }, 2000);
     } catch (error) {
-      alert("Error al actualizar perfil  " + error);
+      setNotificacion_msg({
+        mensaje: "El usuario ya existe",
+        errorColor: true,
+      });
     }
   };
 
   return (
     <div>
-      <h1>Agregar Trabajador</h1>
+      <h1 className="flex justify-center pt-5 text-slate-500 font-bold text-2xl lg:text-4xl">
+        {params.id_producto ? "Editar Trabajador" : "Agregar Trabajador"}
+      </h1>
       <Formik
         initialValues={perfil}
         enableReinitialize={true}
@@ -85,24 +92,27 @@ const TrabajadorForm = () => {
                 />
               )
             }
-            <div className="bg-neutral-200 grid sm:grid-cols-1 gap-2 xl:grid-cols-1 p-4 min-h-80 max-w-2xl mx-4 sm:max-w-sm md:max-w-sm lg:max-w-sm xl:max-w-sm sm:mx-auto md:mx-auto lg:mx-auto xl:mx-auto mt-16 shadow-xl rounded text-gray-900">
-              <Input
-                name={"username"}
-                label={"Usuario"}
-                type={"text"}
-                value={values.username}
-                handleChange={handleChange}
-                errors={errors}
-              ></Input>
 
-              <Input
-                name={"password"}
-                label={"Contraseña"}
-                type={"password"}
-                value={values.password}
-                handleChange={handleChange}
-                errors={errors}
-              ></Input>
+            <div className="bg-neutral-200 grid sm:grid-cols-1 gap-2 xl:grid-cols-1 p-4 min-h-80 max-w-2xl mx-4 sm:max-w-sm md:max-w-sm lg:max-w-sm xl:max-w-sm sm:mx-auto md:mx-auto lg:mx-auto xl:mx-auto mt-16 shadow-xl rounded text-gray-900">
+              <>
+                <Input
+                  name="usuario"
+                  label="Usuario"
+                  type="text"
+                  value={values.usuario}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
+
+                <Input
+                  name="password"
+                  label="Contraseña"
+                  type="password"
+                  value={values.password}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
+              </>
 
               <Input
                 name={"nombre"}
@@ -144,10 +154,10 @@ const TrabajadorForm = () => {
                 handleChange={handleChange}
                 errors={errors}
               ></Input>
-                <Input
+              <Input
                 name={"salario"}
                 label={"Salario"}
-                type={"number"}
+                type={"text"}
                 value={values.salario}
                 handleChange={handleChange}
                 errors={errors}
@@ -169,6 +179,19 @@ const TrabajadorForm = () => {
                   setFile(e.target.files[0]);
                 }}
               />
+
+              {notificacion_msg && (
+                <div
+                  onClick={() => setNotificacion_msg(false)}
+                  className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center"
+                >
+                  <Notificacion
+                    mensaje={notificacion_msg.mensaje}
+                    errorColor={notificacion_msg.errorColor}
+                  />
+                </div>
+              )}
+
               <button
                 className=" bg-huellas_color w-full text-2md text-black font-bold block p-2 rounded-md"
                 type="submit"

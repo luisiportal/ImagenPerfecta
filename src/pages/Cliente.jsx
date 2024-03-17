@@ -7,25 +7,36 @@ const Cliente = () => {
   const { productos, loadProductos } = useProductos();
 
   useEffect(() => {
-    loadProductos();
+   try {
+     loadProductos();
+   } catch (error) {
+    
+   }
   }, []);
 
   function renderMain() {
-    if (productos.length === 0) return <h1>No hay productos</h1>;
-    return productos.map((producto) => (
-      <ProductoCard producto={producto} key={producto.id_producto} />
-    ));
+    try {
+      if (productos.length == 0) return <h1>No hay productos</h1>;
+      return productos.map((producto) => (
+        <ProductoCard producto={producto} key={producto.id_producto} />
+      ));
+    } catch (error) {
+      
+    }
   }
 
   return (
-    <div>
+    <div className="bg-sect_gray">
       {window.location.pathname === "/cliente" && (
         <section className="px-2 pb-2 text-slate-700">
-          <h1 className=" text-3xl  font-bold">Clientes</h1>
-          <p className="text-sm font-semibold">Reserve aqui</p>
+          <h1 className="flex justify-center pt-5 text-slate-500 font-bold text-4xl">
+       Productos
+      </h1>
+      <p className="text-sm text-slate-700 font-semibold flex justify-center">Reserve aqui</p>
+          
         </section>
       )}
-      <section className="grid sm:grid-cols-1 gap-5 xl:grid-cols-3 pt-5 mx-2 lg:mx-48">
+      <section className="grid sm:grid-cols-1 gap-5 xl:grid-cols-3 pt-5 lg:mx-48">
         {renderMain()}
       </section>
     </div>
